@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的在线小游戏网站 | My Online Mini Games</title>
+    <!-- Standard Meta Tags -->
+    <meta name="description" content="欢迎体验我的在线小游戏网站！畅玩各种有趣的小游戏，随时随地享受乐趣！ | Welcome to My Online Mini Games! Play a variety of fun games anytime, anywhere!">
+    <!-- Open Graph Meta Tags for Social Media Sharing -->
+    <meta property="og:title" content="我的在线小游戏网站 | My Online Mini Games">
+    <meta property="og:description" content="欢迎体验我的在线小游戏网站！畅玩各种有趣的小游戏，随时随地享受乐趣！ | Welcome to My Online Mini Games! Play a variety of fun games anytime, anywhere!">
+    <meta property="og:image" content="https://mdaoss.com/preview.jpg">
+    <meta property="og:url" content="https://mdaoss.com">
+    <meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a1a2f;
+            color: white;
+        }
+        .navbar {
+            background-color: #1e2a44;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .search-bar input {
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            border-radius: 20px 0 0 20px;
+            background-color: #0a1a2f;
+            color: white;
+        }
+        .navbar .search-bar button {
+            padding: 8px 16px;
+            background-color: #0a1a2f;
+            color: white;
+            border: none;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+        }
+        .navbar .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .navbar .categories a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .navbar .categories a:hover {
+            color: #00aaff;
+        }
+        .ad-banner {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #1e2a44;
+        }
+        .ad-banner h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .ad-banner iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .game-card {
+            background-color: #1e2a44;
+            border-radius: 8px;
+            text-align: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .game-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        .game-card h3 {
+            font-size: 14px;
+            margin: 8px 0;
+            color: white;
+        }
+        .game-card p {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .pagination button {
+            padding: 8px 16px;
+            background-color: #1e2a44;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .pagination button:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+        footer {
+            padding: 20px;
+            background-color: #1e2a44;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">我的在线小游戏</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="搜索游戏...">
+            <button onclick="searchGames()">搜索</button>
+        </div>
+        <div class="categories">
+            <a href="?category=arcade">街机</a>
+            <a href="?category=adventure">冒险</a>
+            <a href="?category=puzzle">益智</a>
+            <a href="?category=action">动作</a>
+            <a href="?category=casual">休闲</a>
+            <a href="?category=shooter">射击</a>
+            <a href="?category=sports">体育</a>
+            <a href="?category=kids">儿童</a>
+            <a href="?category=car">赛车</a>
+            <a href="?category=fighting">格斗</a>
+            <a href="?category=survival">生存</a>
+            <a href="?category=escape">逃脱</a>
+            <a href="?category=card">卡牌</a>
+            <a href="?category=tanks">坦克</a>
+            <a href="?category=runner">跑酷</a>
+            <a href="?category=chess">棋类</a>
+            <a href="?category=basketball">篮球</a>
+        </div>
+    </div>
+    <div class="ad-banner">
+        <h2 id="featured-game-title">GamePix 推荐游戏</h2>
+        <iframe id="featured-game" src="" allow="fullscreen"></iframe>
+    </div>
+    <div class="main-content">
+        <div id="games" class="game-container"></div>
+        <div class="pagination">
+            <button id="prevPage" onclick="changePage(-1)">上一页</button>
+            <button id="page1" onclick="changePageTo(1)">1</button>
+            <button id="page2" onclick="changePageTo(2)">2</button>
+            <button id="page3" onclick="changePageTo(3)">3</button>
+            <button id="nextPage" onclick="changePage(1)">下一页</button>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 我的在线小游戏网站 | 设计者：mdaoss.com</p>
+    </footer>
+
+    <script>
+        let currentPage = 1;
+        const gamesPerPage = 48;
+        let currentCategory = new URLSearchParams(window.location.search).get("category") || "";
+        const baseUrl = `https://feeds.gamepix.com/v2/json?sid=96571&pagination=${gamesPerPage}&page=`;
+        let allGames = [];
+        let featuredGame = null;
+
+        function loadGames(page) {
+            let rssFeedUrl = `${baseUrl}${page}`;
+            const gamesContainer = document.getElementById("games");
+            gamesContainer.innerHTML = "<p>加载中...</p>";
+
+            fetch(rssFeedUrl)
+                .then(response => response.json())
+                .then(data => {
+                    gamesContainer.innerHTML = "";
+                    allGames = data.items;
+
+                    if (allGames.length === 0) {
+                        gamesContainer.innerHTML = "<p>没有更多游戏了。</p>";
+                        return;
+                    }
+
+                    // 选择第一个游戏作为推荐游戏（嵌入到iframe）
+                    featuredGame = allGames[0];
+                    document.getElementById("featured-game-title").textContent = featuredGame.title;
+                    document.getElementById("featured-game").src = featuredGame.url;
+
+                    // 显示其他游戏（排除推荐游戏）
+                    let filteredGames = allGames.slice(1);
+
+                    if (currentCategory) {
+                        const categoryMap = {
+                            "arcade": "Arcade",
+                            "adventure": "Adventure",
+                            "puzzle": "Puzzle",
+                            "action": "Action",
+                            "casual": "Casual",
+                            "shooter": "Shooter",
+                            "sports": "Sports",
+                            "kids": "Kids",
+                            "car": "Racing",
+                            "fighting": "Fighting",
+                            "survival": "Survival",
+                            "escape": "Escape",
+                            "card": "Card",
+                            "tanks": "Tanks",
+                            "runner": "Runner",
+                            "chess": "Chess",
+                            "basketball": "Basketball"
+                        };
+                        filteredGames = filteredGames.filter(game => game.category === categoryMap[currentCategory]);
+                    }
+
+                    displayGames(filteredGames);
+
+                    document.getElementById("prevPage").disabled = page === 1;
+                    document.getElementById("nextPage").disabled = filteredGames.length < gamesPerPage;
+                    updatePaginationButtons(page);
+                })
+                .catch(error => {
+                    console.error("加载游戏失败:", error);
+                    gamesContainer.innerHTML = "<p>无法加载游戏，请稍后再试。</p>";
+                });
+        }
+
+        function displayGames(games) {
+            const gamesContainer = document.getElementById("games");
+            gamesContainer.innerHTML = "";
+
+            games.forEach(game => {
+                const gameCard = document.createElement("div");
+                gameCard.className = "game-card";
+
+                gameCard.innerHTML = `
+                    <img src="${game.banner_image}" alt="${game.title}">
+                    <h3>${game.title}</h3>
+                    <p>${game.category || "未知类别"}</p>
+                `;
+                gameCard.onclick = () => window.open(game.url, "_blank");
+
+                gamesContainer.appendChild(gameCard);
+            });
+        }
+
+        function searchGames() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            let filteredGames = allGames.slice(1); // 排除推荐游戏
+
+            if (searchTerm) {
+                filteredGames = filteredGames.filter(game => game.title.toLowerCase().includes(searchTerm));
+            }
+
+            if (currentCategory) {
+                const categoryMap = {
+                    "arcade": "Arcade",
+                    "adventure": "Adventure",
+                    "puzzle": "Puzzle",
+                    "action": "Action",
+                    "casual": "Casual",
+                    "shooter": "Shooter",
+                    "sports": "Sports",
+                    "kids": "Kids",
+                    "car": "Racing",
+                    "fighting": "Fighting",
+                    "survival": "Survival",
+                    "escape": "Escape",
+                    "card": "Card",
+                    "tanks": "Tanks",
+                    "runner": "Runner",
+                    "chess": "Chess",
+                    "basketball": "Basketball"
+                };
+                filteredGames = filteredGames.filter(game => game.category === categoryMap[currentCategory]);
+            }
+
+            displayGames(filteredGames);
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            loadGames(currentPage);
+        }
+
+        function changePageTo(page) {
+            currentPage = page;
+            loadGames(currentPage);
+        }
+
+        function updatePaginationButtons(current) {
+            document.getElementById("page1").style.backgroundColor = current === 1 ? "#00aaff" : "#1e2a44";
+            document.getElementById("page2").style.backgroundColor = current === 2 ? "#00aaff" : "#1e2a44";
+            document.getElementById("page3").style.backgroundColor = current === 3 ? "#00aaff" : "#1e2a44";
+        }
+
+        loadGames(currentPage);
+    </script>
+</body>
+</html>
